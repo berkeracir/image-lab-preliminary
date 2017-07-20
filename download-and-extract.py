@@ -13,9 +13,21 @@ URL_rfcn_resnet = "http://download.tensorflow.org/models/object_detection/rfcn_r
 URL_rcnn_resnet = "http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet101_coco_11_06_2017.tar.gz"
 URL_rcnn_inception = "http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_resnet_v2_atrous_coco_11_06_2017.tar.gz"
 
-def download_and_extract():
+def download_and_extract(model):
 	"""Download and extract model tar file."""
-	URL = URL_inception
+	if model == "mobilenet":
+		URL = URL_mobilenet
+	elif model == "inception":
+		URL = URL_mobilenet
+	elif model == "rfcn_resnet":
+		URL = URL_mobilenet
+	elif model == "rcnn_resnet":
+		URL = URL_mobilenet
+	elif model == "rcnn_inception":
+		URL = URL_mobilenet
+	else:
+		print "Error:Unexpected Model"
+		sys.exit()
 	DEST_PATH = os.path.join(CURR_PATH,"data")
 	if not os.path.exists(DEST_PATH):
 		os.makedirs(DEST_PATH)
@@ -30,5 +42,3 @@ def download_and_extract():
 		statinfo = os.stat(filepath)
 		print "Successfully downloaded!", filename, statinfo.st_size, "bytes."
 	tarfile.open(filepath, "r:*").extractall(path=DEST_PATH)
-
-download_and_extract()
