@@ -18,13 +18,13 @@ def download_and_extract(model):
 	if model == "mobilenet":
 		URL = URL_mobilenet
 	elif model == "inception":
-		URL = URL_mobilenet
+		URL = URL_inception
 	elif model == "rfcn_resnet":
-		URL = URL_mobilenet
+		URL = URL_rfcn_resnet
 	elif model == "rcnn_resnet":
-		URL = URL_mobilenet
+		URL = URL_rcnn_resnet
 	elif model == "rcnn_inception":
-		URL = URL_mobilenet
+		URL = URL_rcnn_inception
 	else:
 		print "Error:Unexpected Model"
 		sys.exit()
