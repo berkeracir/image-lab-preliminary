@@ -1,6 +1,10 @@
 import os
 import inspect
 import cv2
+#This code is adapted from Priyanka Dwidedi
+#https://github.com/priya-dwivedi/Deep-Learning/blob/master/Object_Detection_Tensorflow_API.ipynb
+
+
 #import time
 #import argparse
 #import multiprocessing
@@ -105,7 +109,6 @@ IMAGE_SIZE = (12, 8)
 for image_path in TEST_IMAGE_PATHS:
 	image = Image.open(image_path)
 	image_np = load_image_into_numpy_array(image)
-	#plt.imshow(image_np)
 
 detection_graph = tf.Graph()
 with detection_graph.as_default():
@@ -121,9 +124,8 @@ with detection_graph.as_default():
 			image = Image.open(image_path)
 			image_np = load_image_into_numpy_array(image)
 			image_process = detect_objects(image_np, sess, detection_graph)
-			#print(image_process.shape)
+
 			plt.figure(figsize=IMAGE_SIZE)
 			cv2.imwrite("lol_"+image_path,image_np)
-			#plt.imshow(image_process)
-			#plt.show() 
+
 
