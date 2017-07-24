@@ -1,10 +1,9 @@
-import os
-import inspect
-import cv2
 #This code is adapted from Priyanka Dwidedi
 #https://github.com/priya-dwivedi/Deep-Learning/blob/master/Object_Detection_Tensorflow_API.ipynb
 
-
+import os
+import inspect
+import cv2
 #import time
 #import argparse
 #import multiprocessing
@@ -18,6 +17,7 @@ from object_detection.utils import visualization_utils as vis_util
 from PIL import Image
 
 import download_and_extract as dae
+import frame_extract as fe
 
 def model_name(model):
 	if model == "mobilenet":
@@ -39,9 +39,10 @@ INPUT_DIR = os.path.join(CURR_PATH,"input")
 OUTPUT_DIR = os.path.join(CURR_PATH,"output")
 
 # "mobilenet", "inception", "rfcn_resnet", "rcnn_resnet", "rcnn_inception" #
-MODEL = "rcnn_inception"
+MODEL = "mobilenet"
 
 dae.download_and_extract(MODEL)
+fe.frame_extract()
 
 ### maybe need $protoc ... os.system(...)
 
@@ -126,6 +127,4 @@ with detection_graph.as_default():
 			image_process = detect_objects(image_np, sess, detection_graph)
 
 			plt.figure(figsize=IMAGE_SIZE)
-			cv2.imwrite("lol_"+image_path,image_np)
-
-
+			cv2.imwrite("lol_"+image_path,image_np)git pul
