@@ -1,16 +1,19 @@
 import cv2
 import os
+import inspect
 
-path, dirs, files = os.walk('/home/sonat/Desktop/input/').next()
+CURR_PATH = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+
+path, dirs, files = os.walk(os.path.join(CURR_PATH, "videos")).next()
 for i in files:
-	captured_video = cv2.VideoCapture(path+i)
-	success,image = captured_video.read()
+	captured_video = cv2.VideoCapture(os.path.join(path, i)) ## ?
+	success, image = captured_video.read()
 	count = 0
 	success = True
-	directory = '/home/sonat/Desktop/output/'+ i
+	directory = os.path.join(CURR_PATH, "frames", i.split('.')[0])
 	if not os.path.exists(directory):
 		os.makedirs(directory)	
 	while success:
-		success,image = captured_video.read()
-		cv2.imwrite(directory + '/frame%d.jpg' % count, image)
+		cv2.imwrite(directory + '/frame_%d.jpg' % count, image)
+		success, image = captured_video.read()
 		count += 1
