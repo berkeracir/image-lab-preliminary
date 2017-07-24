@@ -1,6 +1,6 @@
 # Image Lab Project
-
 by Berker Acır, Sonat Baltacı
+
 ---
 
 **download_and_extract:** downloads one of the selected model into **_data_** folder and extracts it:
