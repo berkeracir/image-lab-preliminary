@@ -45,7 +45,6 @@ def frame_extract():
 			count += 1
 
 def download_and_extract(model):
-	"""Download and extract model tar file."""
 	if model == "mobilenet":
 		URL = URL_mobilenet
 	elif model == "inception":
@@ -59,20 +58,20 @@ def download_and_extract(model):
 	else:
 		print "Error:Unexpected Model"
 		sys.exit()
-	DEST_PATH = os.path.join(CURR_PATH,"data")
-	if not os.path.exists(DEST_PATH):
-		os.makedirs(DEST_PATH)
+	dest_directory = os.path.join(CURR_PATH,"data")
+	if not os.path.exists(dest_directory):
+		os.makedirs(dest_directory)
 	filename = URL.split('/')[-1]
-	filepath = os.path.join(DEST_PATH, filename)
+	filepath = os.path.join(dest_directory, filename)
 	if not os.path.exists(filepath):
-		def download_progress(count, block_size, total_size):
-			sys.stdout.write("\r>> Downloading: %s | %.1f%%" % (filename,float(count*block_size)/float(total_size)*100))
+		def _progress(count, block_size, total_size):
+			sys.stdout.write('\r>Downloading: %s %.1f%%' % (filename, float(count * block_size) / float(total_size) * 100.0))
 			sys.stdout.flush()
-		filepath, _ = urllib.request.urlretrieve(URL, filepath, download_progress)
+		filepath, _ = urllib.request.urlretrieve(URL, filepath, _progress)
 		print()
 		statinfo = os.stat(filepath)
-		print "Successfully downloaded!", filename, statinfo.st_size, "bytes."
-	tarfile.open(filepath, "r:*").extractall(path=DEST_PATH)
+		print('Successfully downloaded', filename, statinfo.st_size, 'bytes.')
+	tarfile.open(filepath, 'r:gz').extractall(dest_directory)
 
 def model_name(model):
 	if model == "mobilenet":
