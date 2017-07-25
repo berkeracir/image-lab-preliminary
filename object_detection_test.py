@@ -36,11 +36,11 @@ def frame_extract():
 		captured_video = cv2.VideoCapture(os.path.join(path, i))
 		success, image = captured_video.read()
 		count = 0
-		directory = os.path.join(FRAMES_DIR, i.split('.')[0])
+		directory = os.path.join(FRAMES_DIR)
 		if not os.path.exists(directory):
 			os.makedirs(directory)	
-		while success and count < 5:
-			cv2.imwrite(directory + '/frame_%.3d.jpg' % count, image)
+		while success:
+			cv2.imwrite(directory + '/frame_%.4d.jpg' % count, image)
 			success, image = captured_video.read()
 			count += 1
 
@@ -102,8 +102,8 @@ PATH_TO_LABELS = os.path.join(CURR_PATH, "data", MODEL_NAME, "graph.pbtxt")
 NUM_CLASSES = 90
 
 #label_map = label_map_util.load_labelmap("/home/vermithrax/Desktop/image-lab/data/faster_rcnn_inception_resnet_v2_atrous_coco_11_06_2017/graph.pbtxt")
-#label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
-label_map = label_map_util.load_labelmap("/home/vermithrax/tensorflow/models/object_detection/data/mscoco_label_map.pbtxt") ### NOT RIGHT ###
+label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
+#label_map = label_map_util.load_labelmap("/home/vermithrax/tensorflow/models/object_detection/data/mscoco_label_map.pbtxt") ### NOT RIGHT ###
 categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
 
@@ -128,7 +128,6 @@ def detect_objects(image_np, sess, detection_graph):
 		use_normalized_coordinates=True,
 		line_thickness=8)
 
-	#Writing to a file with the desired annotation format
 	(im_height, im_width) = (image_np.shape[0], image_np.shape[1])
 	sqBoxes = np.squeeze(boxes)
 	sqScores = np.squeeze(scores)
@@ -151,10 +150,7 @@ def load_image_into_numpy_array(image):
 	(im_width, im_height) = image.size
 	return np.array(image.getdata()).reshape((im_height, im_width, 3)).astype(np.uint8)
 
-### only for one video
-tmp_path, PATH_TO_VID_FRAMES, files = os.walk(FRAMES_DIR).next()
-PATH_TO_VID_FRAMES = os.path.join(tmp_path,PATH_TO_VID_FRAMES[0])
-tmp_path, tmp_dirs, TEST_IMAGE_PATHS = os.walk(PATH_TO_VID_FRAMES).next()
+tmp_path, dirs, TEST_IMAGE_PATHS = os.walk(FRAMES_DIR).next()
 TEST_IMAGE_PATHS = sorted(TEST_IMAGE_PATHS)
 
 detection_graph = tf.Graph()
@@ -168,7 +164,7 @@ with detection_graph.as_default():
 with detection_graph.as_default():
 	with tf.Session(graph=detection_graph) as sess:
 		for image_path in TEST_IMAGE_PATHS:
-			image = Image.open(os.path.join(PATH_TO_VID_FRAMES,image_path))
+			image = Image.open(os.path.join(tmp_path,image_path))
 			image_np = load_image_into_numpy_array(image)
 			image_process = detect_objects(image_np, sess, detection_graph)
 			image_process = cv2.cvtColor(image_process, cv2.COLOR_RGB2BGR)
